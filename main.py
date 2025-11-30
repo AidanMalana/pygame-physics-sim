@@ -51,8 +51,8 @@ class Solver:
                 diff_v = Vector2(self.objects[i].p_current - self.objects[j].p_current)
                 dist = diff_v.length()
                 if dist < min_dist:
-                    self.objects[0].p_current -= 0.5 * diff_v.normalize() * (dist- min_dist)
-                    self.objects[1].p_current += 0.5 * diff_v.normalize() * (dist - min_dist)
+                    self.objects[0].p_current += 0.5 * diff_v.normalize() * (dist - min_dist)
+                    self.objects[1].p_current -= 0.5 * diff_v.normalize() * (dist - min_dist)
 
     def apply_constraints(self):
         for object in self.objects:
