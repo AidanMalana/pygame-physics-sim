@@ -1,6 +1,9 @@
-import sys, pygame
+import pygame
 from pygame.math import Vector2
 from typing import List
+import random
+import math
+from math import sin
 
 pygame.init()
 
@@ -22,13 +25,14 @@ class VerletObject:
         self.accel = Vector2()
         self.accel.xy = 0, 0
         self.vel = vel
-        self.mass = mass
+        # The engine allows you to make your own mass, but right now it overrides it to make sense
+        self.mass = (radius ** 2) / 100
         self.radius = radius
         self.p_old = p_current - vel
         self.color = color
 
     def apply_force(self, sum_of_forces: Vector2):
-        self.a = sum_of_forces/self.mass
+        self.a = sum_of_forces
             
     def update_position(self, dt):
         self.vel = self.p_current - self.p_old
@@ -51,8 +55,10 @@ class Solver:
                 diff_v = Vector2(self.objects[i].p_current - self.objects[j].p_current)
                 dist = diff_v.length()
                 if dist < min_dist:
-                    self.objects[i].p_current -= 0.5 * diff_v.normalize() * (dist - min_dist)
-                    self.objects[j].p_current += 0.5 * diff_v.normalize() * (dist - min_dist)
+                    mass_ratio_i = self.objects[i].mass / (self.objects[i].mass + self.objects[j].mass)
+                    mass_ratio_j = self.objects[j].mass / (self.objects[i].mass + self.objects[j].mass)
+                    self.objects[i].p_current -= 0.5 * diff_v.normalize() * (dist - min_dist) * mass_ratio_j
+                    self.objects[j].p_current += 0.5 * diff_v.normalize() * (dist - min_dist) * mass_ratio_i
 
     def apply_constraints(self):
         for object in self.objects:
@@ -71,7 +77,7 @@ class Solver:
 
 solver = Solver()
 solver.add_object(VerletObject(Vector2(screen.width/2 + 100, 50), Vector2(0, 0), 1, 10, "white"))
-solver.add_object(VerletObject(Vector2(screen.width/2 - 150, 150), Vector2(0, 0), 1, 10, "white"))
+solver.add_object(VerletObject(Vector2(screen.width/2 - 150, 150), Vector2(0, 0), 2, 20, "white"))
 
 while running:
     for event in pygame.event.get():
@@ -79,7 +85,7 @@ while running:
             running = False
     
     if pygame.key.get_just_pressed()[pygame.K_SPACE]:
-        solver.add_object(VerletObject(Vector2(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]), Vector2(0, 0), 1, 10, "white"))
+        solver.add_object(VerletObject(Vector2(screen.width/2, 50), Vector2(0, 0), 1, random.randint(5, 25), pygame.Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))))
 
     solver.update(dt)
 
@@ -90,4 +96,5 @@ while running:
     pygame.display.flip()
     screen.fill("gray")
     dt = clock.tick(60) / 1000
+    print(1/dt)
 pygame.quit()
