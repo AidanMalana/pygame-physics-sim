@@ -23,10 +23,10 @@ class Ball:
         self.radius = radius
         self.p_old = p_current - vel
 
-    def applyForce(self, sum_of_forces: Vector2):
+    def apply_force(self, sum_of_forces: Vector2):
         self.a = sum_of_forces/self.mass
 
-    def updatePosition(self):
+    def update_position(self):
         self.p_current += (0, 10)
         # update velocity
 
