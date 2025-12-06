@@ -19,3 +19,5 @@ deactivate
 - [ ] Procedural Animation
 - [ ] Compare Euler vs Verlet
 - [ ] Polish
+
+Feel free to make a PR if you want, but be forewarned, I'm probably going to rewrite this whole thing in C over winterbreak for better performance, I just needed to give myself a little python refresher before I take Programming 2
