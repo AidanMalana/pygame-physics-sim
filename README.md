@@ -15,7 +15,7 @@ deactivate
 ```
 ### Todo:
 - [x] Basic Verlet Integration
-- [ ] Rope Sim
+- [ ] Rope Sim (Still WIP on my local machine, I showed a half-baked kind of thing in the blog)
 - [ ] Procedural Animation
 - [ ] Compare Euler vs Verlet
 - [ ] Polish
